@@ -23,13 +23,13 @@ public class TodoController {
         this.service = service;
     }
 
-    @GetMapping
+    @PostMapping
     public List<Todo> salvarTodos(@RequestBody Todo todo) {
         service.saveTodo(todo);
         return service.getAllTodos();
     }
 
-    @PostMapping
+    @GetMapping
     public List<Todo> getAllTodos() {
         return service.getAllTodos();
     }
