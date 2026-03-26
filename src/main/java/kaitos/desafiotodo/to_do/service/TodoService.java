@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import kaitos.desafiotodo.to_do.entity.Todo;
 import kaitos.desafiotodo.to_do.repository.TodoRepository;
+import kaitos.desafiotodo.to_do.exception.BadRequestException;
 
 @Service
 public class TodoService {
@@ -27,13 +28,22 @@ public class TodoService {
         return todoRepository.findAll(sort);
     }
 
-    public List<Todo> updateTodos(Todo todo) {
-        todoRepository.save(todo);
+    public List<Todo> updateTodos(Todo todo, long id) {
+        todoRepository.findById(id).ifPresentOrElse((existingTodo) -> {
+            todo.setId(id);
+            todoRepository.save(todo);
+        }, () -> {
+            throw new BadRequestException("ID " + id + " não encontrado");
+        });
         return getAllTodos();
     }
 
     public List<Todo> deleteTodos(long id) {
-        todoRepository.deleteById(id);
+        todoRepository.findById(id).ifPresentOrElse((existingTodo) -> {
+            todoRepository.deleteById(id);
+        }, () -> {
+            throw new BadRequestException("ID " + id + " não encontrado");
+        });
         return getAllTodos();
     }
 }

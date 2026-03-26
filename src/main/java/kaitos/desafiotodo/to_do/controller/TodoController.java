@@ -34,9 +34,9 @@ public class TodoController {
         return service.getAllTodos();
     }
 
-    @PutMapping
-    public List<Todo> updateTodo(@RequestBody Todo todo) {
-        service.saveTodo(todo);
+    @PutMapping("{id}")
+    public List<Todo> updateTodo(@RequestBody Todo todo, @PathVariable long id) {
+        service.updateTodos(todo, id);
         return service.getAllTodos();
     }
 
